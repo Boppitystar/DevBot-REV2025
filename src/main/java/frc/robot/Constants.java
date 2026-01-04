@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-//import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -82,22 +82,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    //add constants here that are not in pathplanner/limelight if needed
-    public static final double X_TAG_ALIGNMENT_P = 0.1; //TODO: tune limelight pid  
-    public static final double Y_TAG_ALIGNMENT_P = 0.1; 
-    public static final double ROT_TAG_ALIGNMENT_P = 0.1; 
-
-    public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;  // Rotation
-    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1;
-    
-    public static final double X_SETPOINT_REEF_ALIGNMENT = -0.34;  // Vertical pose and tolerance 
-    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
-
-    public static final double Y_SETPOINT_REEF_ALIGNMENT = 0.16;  // Horizontal pose (- for diff sides of tag)
-    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02; 
-
-    public static final double DONT_SEE_TAG_WAIT_TIME = 1;
-	  public static final double POSE_VALIDATION_TIME = 0.3;
+    //add constants here that are not in pathplanner if needed
   }
 
   public static final class MotorConstants {

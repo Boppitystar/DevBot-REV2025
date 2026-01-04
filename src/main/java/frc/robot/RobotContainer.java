@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AlignToTagRelative;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -63,18 +62,12 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+
     //schedule defense position when driver controller right bumper is pressed 
     mDriverController.rightBumper()
       .whileTrue(mDriveSubsystem.defensePosition());
-
-    //schedule align to robot relative command when left bumper is pressed
-    mDriverController.y()
-      .onTrue(new AlignToTagRelative(false, mDriveSubsystem).withTimeout(3));
-    
-    mDriverController.x()
-      .onTrue(new AlignToTagRelative(true, mDriveSubsystem).withTimeout(3));
-
-    
   }
 
   /**
