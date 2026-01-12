@@ -41,7 +41,7 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick. field relative set true/false 
         new RunCommand(
-            () -> mDriveSubsystem.drive(
+            () -> mDriveSubsystem.driveJoystick(
                 MathUtil.applyDeadband(mDriverController.getLeftY(), OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband(mDriverController.getLeftX(), OperatorConstants.DRIVE_DEADBAND),
                 MathUtil.applyDeadband(mDriverController.getRightX(), OperatorConstants.DRIVE_DEADBAND),
@@ -68,11 +68,11 @@ public class RobotContainer {
       .whileTrue(mDriveSubsystem.defensePosition());
 
     //schedule align to robot relative command when left bumper is pressed
-    mDriverController.y()
-      .onTrue(new AlignToTagRelative(false, mDriveSubsystem).withTimeout(3));
+   // mDriverController.y()
+    //  .onTrue(new AlignToTagRelative(false, mDriveSubsystem).withTimeout(3));
     
-    mDriverController.x()
-      .onTrue(new AlignToTagRelative(true, mDriveSubsystem).withTimeout(3));
+    //mDriverController.x()
+      //.onTrue(new AlignToTagRelative(true, mDriveSubsystem).withTimeout(3));
 
     
   }

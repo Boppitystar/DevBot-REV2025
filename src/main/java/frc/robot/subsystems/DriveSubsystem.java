@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -103,20 +104,29 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void driveJoystick(double xJoystick, double yJoystick, double rotJoystick, boolean fieldRelative) {
     
     //convert joystick input (-1, 1) to m/s for drivetrain 
-    double xSpeedDelivered = xSpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND; 
-    double ySpeedDelivered = ySpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND;
-    double rotDelivered = rot * DriveConstants.MAX_ANGULAR_SPEED;
+    double xSpeedDelivered = xJoystick * DriveConstants.MAX_SPEED_METERS_PER_SECOND; 
+    double ySpeedDelivered = yJoystick * DriveConstants.MAX_SPEED_METERS_PER_SECOND;
+    double rotDelivered = rotJoystick * DriveConstants.MAX_ANGULAR_SPEED;
+
+    driveChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, fieldRelative);
+  }
+
+  public void driveChassisSpeeds(double xSpeed, double ySpeed, double rotValue, boolean fieldRelative){
+    // clamps speed to be within max/min range 
+    double xSpeedClamped = MathUtil.clamp(xSpeed, -DriveConstants.MAX_SPEED_METERS_PER_SECOND,DriveConstants.MAX_SPEED_METERS_PER_SECOND); 
+    double ySpeedClamped = MathUtil.clamp(ySpeed, -DriveConstants.MAX_SPEED_METERS_PER_SECOND,DriveConstants.MAX_SPEED_METERS_PER_SECOND); 
+    double rotDelivered = MathUtil.clamp(rotValue, -DriveConstants.MAX_ANGULAR_SPEED, DriveConstants.MAX_ANGULAR_SPEED);
 
     //convert chassis speed to swerve module states (motor output); field relative or robot relative 
     var swerveModuleStates = DriveConstants.DriveKinematics.toSwerveModuleStates(
       fieldRelative 
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, 
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedClamped, ySpeedClamped, 
           rotDelivered, Rotation2d.fromDegrees(-mGyro.getAngle()))
         
-        : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+        : new ChassisSpeeds(xSpeedClamped, ySpeedClamped, rotDelivered));
     
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.MAX_SPEED_METERS_PER_SECOND);
@@ -125,6 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
     mFrontRight.setDesiredState(swerveModuleStates[1]);
     mBackLeft.setDesiredState(swerveModuleStates[2]);
     mBackRight.setDesiredState(swerveModuleStates[3]);
+
   }
 
   /**
